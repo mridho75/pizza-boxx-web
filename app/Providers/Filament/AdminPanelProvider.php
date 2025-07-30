@@ -68,77 +68,59 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->navigationGroups(array_filter([
-                // Navigation untuk Admin Pusat
-                auth()->user()?->hasRole('admin') ? NavigationGroup::make('Manajemen Pusat')->items([
+            ->navigationGroups([
+                fn () => auth()->check() && auth()->user()->hasRole('admin') ? NavigationGroup::make('Manajemen Pusat')->items([
                     NavigationItem::make('Dashboard')
                         ->url(fn (): string => route('filament.admin.pages.dashboard'))
                         ->icon('heroicon-o-home')
                         ->activeIcon('heroicon-s-home')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard')),
-
                     NavigationItem::make('Users')
                         ->url(fn (): string => User::getUrl())
                         ->icon('heroicon-o-users')
                         ->activeIcon('heroicon-s-users')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.users.index')),
-
                     NavigationItem::make('Categories')
                         ->url(fn (): string => Category::getUrl())
                         ->icon('heroicon-o-tag')
                         ->activeIcon('heroicon-s-tag')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.categories.index')),
-
                     NavigationItem::make('Locations')
                         ->url(fn (): string => Location::getUrl())
                         ->icon('heroicon-o-building-storefront')
                         ->activeIcon('heroicon-s-building-storefront')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.locations.index')),
-
                     NavigationItem::make('Products')
                         ->url(fn (): string => Product::getUrl())
                         ->icon('heroicon-o-archive-box')
                         ->activeIcon('heroicon-s-archive-box')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.products.index')),
-
                     NavigationItem::make('Product Options')
                         ->url(fn (): string => ProductOption::getUrl())
                         ->icon('heroicon-o-adjustments-vertical')
                         ->activeIcon('heroicon-s-adjustments-vertical')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.product-options.index')),
-
                     NavigationItem::make('Product Addons')
                         ->url(fn (): string => ProductAddon::getUrl())
                         ->icon('heroicon-o-plus-circle')
                         ->activeIcon('heroicon-s-plus-circle')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.product-addons.index')),
-
                     NavigationItem::make('Promos')
                         ->url(fn (): string => Promo::getUrl())
                         ->icon('heroicon-o-gift')
                         ->activeIcon('heroicon-s-gift')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.promos.index')),
                 ]) : null,
-
-                // Navigation untuk Admin & Pegawai
-                auth()->user()?->hasAnyRole(['admin', 'employee']) ? NavigationGroup::make('Manajemen Pesanan')->items([
+                fn () => auth()->check() && auth()->user()->hasAnyRole(['admin', 'employee']) ? NavigationGroup::make('Manajemen Pesanan')->items([
                     NavigationItem::make('Orders')
                         ->url(fn (): string => Order::getUrl())
                         ->icon('heroicon-o-shopping-bag')
                         ->activeIcon('heroicon-s-shopping-bag')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.orders.index')),
                 ]) : null,
-
-                // Navigation untuk Pegawai (Admin Cabang)
-                auth()->user()?->hasRole('employee') ? NavigationGroup::make('Manajemen Cabang')->items([
+                fn () => auth()->check() && auth()->user()->hasRole('employee') ? NavigationGroup::make('Manajemen Cabang')->items([
                     // Tambahkan menu cabang di sini jika ada nanti
-                    // Contoh:
-                    // NavigationItem::make('Input Pesanan Offline')
-                    //     ->url(fn (): string => route('filament.admin.pages.create-offline-order'))
-                    //     ->icon('heroicon-o-shopping-cart')
-                    //     ->activeIcon('heroicon-s-shopping-cart')
-                    //     ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.create-offline-order')),
                 ]) : null,
-            ]));
+            ]);
     }
 }
