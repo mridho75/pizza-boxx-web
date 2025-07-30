@@ -68,8 +68,8 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->navigationGroups([
-                fn () => auth()->check() && auth()->user()->hasRole('admin') ? NavigationGroup::make('Manajemen Pusat')->items([
+            ->navigationGroups(array_filter([
+                (auth()->check() && auth()->user()->hasRole('admin')) ? NavigationGroup::make('Manajemen Pusat')->items([
                     NavigationItem::make('Dashboard')
                         ->url(fn (): string => route('filament.admin.pages.dashboard'))
                         ->icon('heroicon-o-home')
@@ -111,16 +111,16 @@ class AdminPanelProvider extends PanelProvider
                         ->activeIcon('heroicon-s-gift')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.promos.index')),
                 ]) : null,
-                fn () => auth()->check() && auth()->user()->hasAnyRole(['admin', 'employee']) ? NavigationGroup::make('Manajemen Pesanan')->items([
+                (auth()->check() && auth()->user()->hasAnyRole(['admin', 'employee'])) ? NavigationGroup::make('Manajemen Pesanan')->items([
                     NavigationItem::make('Orders')
                         ->url(fn (): string => Order::getUrl())
                         ->icon('heroicon-o-shopping-bag')
                         ->activeIcon('heroicon-s-shopping-bag')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.resources.orders.index')),
                 ]) : null,
-                fn () => auth()->check() && auth()->user()->hasRole('employee') ? NavigationGroup::make('Manajemen Cabang')->items([
+                (auth()->check() && auth()->user()->hasRole('employee')) ? NavigationGroup::make('Manajemen Cabang')->items([
                     // Tambahkan menu cabang di sini jika ada nanti
                 ]) : null,
-            ]);
+            ]));
     }
 }
