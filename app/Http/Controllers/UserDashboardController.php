@@ -12,7 +12,7 @@ class UserDashboardController extends Controller
     {
         $orders = Order::where('user_id', Auth::id())
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(10);
         return view('user.dashboard', compact('orders'));
     }
 }
