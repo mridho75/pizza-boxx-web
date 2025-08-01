@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -81,5 +80,12 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Order::class, 'user_id');
     }
 
+    /**
+     * Relasi ke alamat-alamat user
+     */
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(Address::class);
+    }
 
 }

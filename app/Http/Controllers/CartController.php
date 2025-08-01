@@ -116,6 +116,13 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk berhasil ditambahkan ke keranjang!',
+                'cart_count' => count($cart)
+            ]);
+        }
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 

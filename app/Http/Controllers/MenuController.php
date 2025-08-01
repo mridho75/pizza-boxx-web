@@ -24,7 +24,7 @@ class MenuController extends Controller
             $productsQuery->where('category_id', $selectedCategory);
         }
 
-        $products = $productsQuery->where('is_available', true)->get();
+        $products = $productsQuery->where('is_available', true)->paginate(12);
 
         // --- TAMBAHAN UNTUK CEK LOKASI ---
         // Dapatkan lokasi cabang Sukahati (sesuaikan dengan nama lokasi yang Anda masukkan di admin)

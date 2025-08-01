@@ -16,9 +16,19 @@
         @endif
 
         @if(empty($cart))
-            <div class="bg-white p-8 rounded-lg shadow-lg text-center"> {{-- Perubahan: bg-white --}}
-                <p class="text-gray-600 text-lg mb-4">Keranjang Anda masih kosong.</p> {{-- Perubahan: text-gray-600 --}}
-                <a href="{{ route('menu.index') }}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-colors">
+            <div class="bg-white p-12 rounded-2xl shadow-2xl text-center flex flex-col items-center gap-6 max-w-3xl mx-auto animate-fade-in">
+                <div class="flex justify-center mb-2">
+                    <svg class="w-24 h-24 text-red-400/80" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 48 48">
+                        <rect x="6" y="14" width="36" height="22" rx="4" stroke="currentColor" stroke-width="2" fill="#fff"/>
+                        <path d="M10 14V10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v4" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <circle cx="16" cy="40" r="3" fill="#f87171"/>
+                        <circle cx="32" cy="40" r="3" fill="#f87171"/>
+                    </svg>
+                </div>
+                <div class="text-xl md:text-2xl font-semibold text-gray-700 mb-2">Keranjang Anda masih kosong.</div>
+                <div class="text-gray-500 mb-4">Yuk, temukan pizza favoritmu dan mulai belanja sekarang!</div>
+                <a href="{{ route('menu.index') }}" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition-all text-lg shadow-md">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                     Mulai Belanja Sekarang!
                 </a>
             </div>

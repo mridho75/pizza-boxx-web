@@ -1,5 +1,22 @@
-/* resources/css/app.css */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Definisikan keyframe untuk animasi */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Atur elemen yang akan dianimasikan */
+.animate-marquee {
+  display: inline-block;
+  min-width: 200%; /* Pastikan lebar cukup untuk loop mulus */
+  animation: marquee 50s linear infinite;
+  animation-play-state: running; /* Animasi berjalan secara default */
+}
+
+/* Saat mouse hover di atas elemen .group, jeda animasi di dalam .animate-marquee */
+.group:hover .animate-marquee {
+  animation-play-state: paused;
+}

@@ -128,11 +128,60 @@
                 {{-- Delivery Details (Muncul jika order_type = delivery) --}}
                 <div id="delivery_details" class="mb-6">
                     <h3 class="text-xl font-bold text-gray-700 mb-3">Detail Pengiriman</h3>
+                    @if(auth()->check() && $user->addresses && $user->addresses->count())
+                    <div class="mb-4">
+                        <label for="address_select" class="block text-lg font-medium text-gray-700 mb-2">Pilih Alamat Tersimpan</label>
+                        <select id="address_select" class="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-800 focus:ring-red-500 focus:border-red-500">
+                            <option value="">-- Pilih alamat --</option>
+                            @foreach($user->addresses as $address)
+                                <option value="{{ $address->address }}" data-phone="{{ $address->phone }}">
+                                    {{ $address->label }} - {{ $address->address }}
+                                    @if($address->phone)
+                                        [{{ $address->phone }}]
+                                    @endif
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
                     <div class="mb-4">
                         <label for="delivery_address" class="block text-lg font-medium text-gray-700 mb-2">Alamat Pengiriman <span class="text-red-500">*</span></label>
                         <textarea id="delivery_address" name="delivery_address" rows="3"
                             class="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-gray-800 focus:ring-red-500 focus:border-red-500">{{ old('delivery_address', $user->address ?? '') }}</textarea>
                     </div>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var addressSelect = document.getElementById('address_select');
+    var addressTextarea = document.getElementById('delivery_address');
+    var phoneInput = document.getElementById('customer_phone');
+    if(addressSelect && addressTextarea) {
+        // Autofill nomor telepon dari alamat pertama jika ada
+        // Jika ada alamat yang dipilih (selected), autofill phone sesuai alamat terpilih
+        if(addressSelect.options.length > 1 && phoneInput && !phoneInput.value) {
+            var selectedIdx = addressSelect.selectedIndex > 0 ? addressSelect.selectedIndex : 1;
+            var selected = addressSelect.options[selectedIdx];
+            var phone = selected.getAttribute('data-phone');
+            if(phone) {
+                phoneInput.value = phone;
+                phoneInput.dispatchEvent(new Event('input'));
+            }
+        }
+        addressSelect.addEventListener('change', function() {
+            addressTextarea.value = this.value;
+            if(this.selectedIndex > 0 && phoneInput) {
+                var selected = this.options[this.selectedIndex];
+                var phone = selected.getAttribute('data-phone');
+                if(phone) {
+                    phoneInput.value = phone;
+                    phoneInput.dispatchEvent(new Event('input'));
+                }
+            }
+        });
+    }
+});
+</script>
+@endpush
                     <div class="mb-4">
                         <label for="delivery_notes" class="block text-lg font-medium text-gray-700 mb-2">Catatan Pengiriman (opsional)</label>
                         <textarea id="delivery_notes" name="delivery_notes" rows="2"
